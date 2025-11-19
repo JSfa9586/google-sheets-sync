@@ -43,6 +43,12 @@ jobs:
           }
           EOF
 
+      - name: Download previous sync state
+        uses: actions/download-artifact@v4
+        with:
+          name: sync-state
+        continue-on-error: true
+
       - name: Run sync
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -52,11 +58,12 @@ jobs:
           python sync_google_sheet_incremental.py
 
       - name: Upload sync state
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sync-state
           path: sync_state.json
           retention-days: 90
+          overwrite: true
 
       - name: Clean up sensitive files
         if: always()
