@@ -1,0 +1,65 @@
+name: Google Sheets to Supabase Auto Sync
+
+on:
+  schedule:
+    # 3시간마다 실행 (UTC 기준)
+    - cron: '0 */3 * * *'
+
+  # 수동 실행 가능
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install gspread google-auth openai
+
+      - name: Create Service Account file
+        run: |
+          echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}' > service-account.json
+
+      - name: Create config.json
+        run: |
+          cat > config.json << 'EOF'
+          {
+            "sheet_id": "${{ secrets.SHEET_ID }}",
+            "gid": "${{ secrets.GID }}",
+            "service_account_file": "service-account.json",
+            "sbdb_db_name": "${{ secrets.SBDB_DB_NAME }}",
+            "tags": ["구글시트", "자동동기화"],
+            "required_column_index": 1,
+            "category_tag": "입찰참여"
+          }
+          EOF
+
+      - name: Run sync
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python sync_google_sheet_incremental.py
+
+      - name: Upload sync state
+        uses: actions/upload-artifact@v3
+        with:
+          name: sync-state
+          path: sync_state.json
+          retention-days: 90
+
+      - name: Clean up sensitive files
+        if: always()
+        run: |
+          rm -f service-account.json
+          rm -f config.json

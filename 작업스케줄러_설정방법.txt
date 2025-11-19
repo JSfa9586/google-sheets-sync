@@ -1,0 +1,85 @@
+==================================================
+Windows 작업 스케줄러 수동 설정 방법
+==================================================
+
+1. 작업 스케줄러 열기
+   - Win + R 키 → "taskschd.msc" 입력 → 엔터
+
+2. 기본 작업 만들기
+   - 오른쪽 패널에서 "기본 작업 만들기..." 클릭
+
+3. 기본 작업 마법사
+
+   [1단계] 이름 및 설명
+   - 이름: GoogleSheets-to-sbdb-AutoSync
+   - 설명: 3시간마다 구글 시트를 sbdb에 자동 동기화합니다.
+   - 다음 클릭
+
+   [2단계] 트리거
+   - "매일" 선택 → 다음 클릭
+   - 시작 날짜/시간: 오늘 날짜, 현재 시간
+   - 다음 클릭
+
+   [3단계] 동작
+   - "프로그램 시작" 선택 → 다음 클릭
+   - 프로그램/스크립트: C:\AI\놀이터\run_sync.bat
+   - 다음 클릭
+
+   [4단계] 요약
+   - "마침을 클릭할 때 이 작업의 속성 대화 상자 열기" 체크
+   - 마침 클릭
+
+4. 추가 설정 (속성 대화 상자)
+
+   [트리거 탭]
+   - 방금 만든 트리거 선택 → "편집" 클릭
+   - "고급 설정" 섹션에서:
+     ☑ 작업 반복 간격: 3시간
+     ☑ 기간: 무기한
+   - 확인 클릭
+
+   [설정 탭]
+   - ☑ 요청 시 작업 실행 허용
+   - ☑ 작업이 실행되지 않은 경우 가능한 빨리 작업 실행
+   - ☑ 네트워크를 사용할 수 있는 경우에만 작업 시작
+
+   [조건 탭]
+   - ☐ 컴퓨터의 전원이 AC인 경우에만 작업 시작 (체크 해제)
+   - ☑ 네트워크를 사용할 수 있는 경우에만 작업 시작 (체크)
+
+   - 확인 클릭하여 저장
+
+5. 작업 확인
+   - 작업 스케줄러 라이브러리에서 "GoogleSheets-to-sbdb-AutoSync" 작업 확인
+   - 우클릭 → "실행"으로 즉시 테스트 가능
+
+==================================================
+로그 파일 위치
+==================================================
+C:\AI\놀이터\logs\
+
+각 실행마다 sync_YYYYMMDD_HHMMSS.log 파일이 생성됩니다.
+
+==================================================
+작업 관리 명령어 (PowerShell)
+==================================================
+
+# 즉시 실행
+Start-ScheduledTask -TaskName "GoogleSheets-to-sbdb-AutoSync"
+
+# 작업 상태 확인
+Get-ScheduledTask -TaskName "GoogleSheets-to-sbdb-AutoSync"
+
+# 마지막 실행 결과 확인
+Get-ScheduledTaskInfo -TaskName "GoogleSheets-to-sbdb-AutoSync"
+
+# 작업 비활성화
+Disable-ScheduledTask -TaskName "GoogleSheets-to-sbdb-AutoSync"
+
+# 작업 활성화
+Enable-ScheduledTask -TaskName "GoogleSheets-to-sbdb-AutoSync"
+
+# 작업 삭제
+Unregister-ScheduledTask -TaskName "GoogleSheets-to-sbdb-AutoSync" -Confirm:$false
+
+==================================================

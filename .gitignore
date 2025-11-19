@@ -1,0 +1,38 @@
+# Logs
+*.log
+logs/
+
+# Sync state (managed by GitHub Actions artifacts)
+sync_state.json
+
+# Config files (use GitHub Secrets instead)
+config.json
+
+# Service Account (use GitHub Secrets instead)
+gen-lang-client-*.json
+*service-account*.json
+
+# Python
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+temp/

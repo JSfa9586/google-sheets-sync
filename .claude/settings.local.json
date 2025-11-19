@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -Command \"python ''C:\\Users\\hjj\\.claude\\skills\\sbdb\\scripts\\list_documents.py'' --limit 20\")",
+      "Bash(powershell.exe -Command \"python ''C:\\Users\\hjj\\.claude\\skills\\sbdb\\scripts\\search_documents.py'' ''사 우 회 경조비''\")",
+      "Bash(pip install:*)",
+      "Bash(winget install:*)",
+      "Bash(curl:*)",
+      "Bash(powershell -Command \"(Get-Content ''C:\\Users\\hjj\\.claude\\skills\\sbdb\\GPT_INSTRUCTIONS.md'' -Raw).Length\")",
+      "Bash(powershell.exe:*)",
+      "Skill(sbdb)",
+      "Bash(python:*)",
+      "Skill(excel-analysis)",
+      "Bash(/plugin install:*)",
+      "Bash(cat:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:docs.google.com)",
+      "Bash(test:*)",
+      "Bash(tee:*)",
+      "Bash(if [ -f sync_state.json ])",
+      "Bash(then rm sync_state.json)",
+      "Bash(else echo \"sync_state.json 파일이 없습니다\")",
+      "Bash(fi)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
